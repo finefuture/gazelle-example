@@ -1,0 +1,73 @@
+Configuration:
+  status: debug
+  Properties: # 定义全局变量
+    Property: # 缺省配置（用于开发环境）。其他环境需要在VM参数中指定，如下：
+      #测试：-Dlog.level.console=warn -Dlog.level.xjj=trace
+      #生产：-Dlog.level.console=warn -Dlog.level.xjj=info
+      - name: log.level.console
+        value: debug
+      - name: log.level.xjj
+        value: debug
+      - name: log.path
+        value: log
+  Filter:
+    ThresholdFilter: info
+  Appenders:
+    Console:  #输出到控制台
+      name: stdout
+      target: SYSTEM_OUT
+      ThresholdFilter:
+        level: ${sys:log.level.console} # “sys:”表示：如果VM参数中没指定这个变量值，则使用本文件中定义的缺省全局变量值
+        onMatch: ACCEPT
+        onMismatch: DENY
+      PatternLayout:
+        pattern: "%d{yyyy-MM-dd HH:mm:ss,SSS}:%4p %t (%F:%L) - %m%n"
+    RollingFile: # 输出到文件，超过128MB归档
+      - name: info_file
+        fileName: ${log.path}/info/info.log
+        filePattern: "${log.path}/info/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log"
+        PatternLayout:
+          pattern: "%d{yyyy-MM-dd HH:mm:ss,SSS}:%4p %t (%F:%L) - %m%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: "128 MB"
+          TimeBasedTriggeringPolicy:
+            modulate: true
+            interval: 24
+        DefaultRolloverStrategy:
+          max: 10
+        ThresholdFilter:
+          level: info # “sys:”表示：如果VM参数中没指定这个变量值，则使用本文件中定义的缺省全局变量值
+          onMatch: ACCEPT
+          onMismatch: DENY
+      - name: error_file
+        fileName: ${log.path}/error/error.log
+        filePattern: "${log.path}/error/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log"
+        PatternLayout:
+          pattern: "%d{yyyy-MM-dd HH:mm:ss,SSS}:%4p %t (%F:%L) - %m%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: "128 MB"
+          TimeBasedTriggeringPolicy:
+            modulate: true
+            interval: 24
+        DefaultRolloverStrategy:
+          max: 10
+        ThresholdFilter:
+          level: error # “sys:”表示：如果VM参数中没指定这个变量值，则使用本文件中定义的缺省全局变量值
+          onMatch: ACCEPT
+          onMismatch: DENY
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+        - ref: stdout
+        - ref: info_file
+        - ref: error_file
+#    Logger: # 为com.xjj包配置特殊的Log级别，方便调试
+#      - name: com.xjj
+#        additivity: false
+#        level: ${sys:log.level.xjj}
+#        AppenderRef:
+#          - ref: CONSOLE
+#          - ref: ROLLING_FILE

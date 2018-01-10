@@ -1,0 +1,58 @@
+group 'org.gra4j'
+version '1.0'
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.7.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+configurations {
+    compile.exclude group:'ch.qos.logback'
+}
+
+dependencies {
+    // tag::jetty[]
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+        exclude module: 'org.springframework.boot:spring-boot-starter-logging'
+    }
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    // end::jetty[]
+    // tag::actuator[]
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    // end::actuator[]
+    // tag::orm[]
+    //compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.springframework:spring-orm")
+    compile("io.github.finefuture:gazelle:1.0")
+    compile("org.postgresql:postgresql:42.1.4")
+    compile("com.alibaba:druid:1.0.29")
+    // end::orm[]
+    // tag::util[]
+    compile("org.springframework.boot:spring-boot-starter-log4j2")
+    compile("org.springframework:spring-aspects")
+    compile("org.projectlombok:lombok:1.16.16")
+    compile("com.alibaba:fastjson:1.2.7")
+    compile("org.apache.commons:commons-lang3:3.4")
+    compile("cglib:cglib:3.2.5")
+    compile("log4j:log4j:1.2.17")
+    compile("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
+    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
+    // end::util[]
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
