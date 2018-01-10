@@ -17,6 +17,6 @@ git clone https://github.com/finefuture/gazelle-example.git
 ###### 启动类:  GazelleExampleApplication.java
 
 ###### 访问接口： 
-				http://localhost:8100/jpa/test
-			    http://localhost:8100/jpa/test1
-				http://localhost:8100/jpa/test2
+			http://localhost:8100/jpa/test
+		        http://localhost:8100/jpa/test1
+			http://localhost:8100/jpa/test2
