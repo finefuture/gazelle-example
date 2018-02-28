@@ -15,7 +15,7 @@ import javax.persistence.EntityManager;
  * Created by Administrator on 2017/12/5.
  */
 @Configuration
-@EnableTransactionManagement(order = 10)
+@EnableTransactionManagement
 public class TransactionConfiguration {
 
     @Autowired
@@ -28,10 +28,8 @@ public class TransactionConfiguration {
         return entityManagerFactoryPrimary.getObject().createEntityManager();
     }
 
-
     @Bean(name = "transactionManagerPrimary")
     PlatformTransactionManager transactionManagerPrimary() {
         return new JpaTransactionManager(entityManagerFactoryPrimary.getObject());
     }
-
 }

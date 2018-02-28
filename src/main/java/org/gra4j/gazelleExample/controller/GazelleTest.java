@@ -17,18 +17,40 @@ public class GazelleTest {
     private ShopService shopService;
 
     @RequestMapping("test")
-    public Response test () {
-        return new Response().success(shopService.get(true, null, 10, 100));
+    public Response test (String name) {
+        return new Response().success(shopService.get(name));
     }
 
     @RequestMapping("test1")
     public Response test1 () {
-        return new Response().success(shopService.find(true, 10, 10));
+        return new Response().success(shopService.find());
     }
 
     @RequestMapping("test2")
     public Response test2 () {
+        return new Response().success(shopService.find(0));
+    }
+
+    @RequestMapping("test3")
+    public Response test3 (String id) {
+        shopService.delete(id);
+        return new Response().success();
+    }
+
+    @RequestMapping("test4")
+    public Response test4 () {
         return new Response().success(shopService.update());
+    }
+
+    @RequestMapping("test5")
+    public Response test5 () {
+        shopService.testTX();
+        return new Response().success();
+    }
+
+    @RequestMapping("test6")
+    public Response test6 (String name) {
+        return new Response().success(shopService.rupdate(name));
     }
 
 }
